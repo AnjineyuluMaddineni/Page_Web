@@ -1,0 +1,87 @@
+﻿@model IEnumerable<EmployeeModelView>
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if (TempData["Message"] is not null)
+{
+    <div id="alertContainer">
+        <div class="alert alert-success" role="alert">
+            @TempData["Message"]
+        </div>
+    </div>
+}
+<a asp-action="Create" class="btn btn-primary">Create New Employee</a>
+@if (Model.Count() > 0)
+{
+    <div class="m-2">
+    <form asp-action="Index" class="row offset-2" >
+        <div class="col-8">
+            <input class="form-control" type="text" name="Search" placeholder="Employee Name" />
+        </div>
+        <div col-4>
+                <input type="submit" value="Search" class="btn btn-success" />
+			</div>
+    </form>
+    </div>
+
+
+    <h1>All Employee </h1>
+    <br />
+    <table class="table table-striped table-hover">
+        <thead>
+			<tr>
+				<td>@Html.DisplayNameFor(D => D.Image)</td>
+                <td>@Html.DisplayNameFor(D => D.Name)</td>
+                <td>@Html.DisplayNameFor(D => D.Age)</td>
+                <td>@Html.DisplayNameFor(D => D.Salary)</td>
+                <td>@Html.DisplayNameFor(D => D.department)</td>
+                <td>@Html.DisplayNameFor(D => D.Email)</td>
+                <td>@Html.DisplayNameFor(D => D.PhoneNumber)</td>
+                <td>@Html.DisplayNameFor(D => D.HireData)</td>
+                <td>@Html.DisplayNameFor(D => D.IsActive)</td>
+                <td>Details</td>
+                <td>Updata</td>
+                <td>Delete</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach(var emp in Model)
+            {
+                <tr>
+                    <td><img src="~/Files/Images/@emp.ImageName" class="rounded" height="40" width="40" alt="Employee Image"  /></td>
+                    <td>@emp.Name</td>
+                    <td>@emp.Age</td>
+                    <td>@Html.DisplayFor(E => emp.Salary)</td>
+                    <td>@Html.DisplayFor(E => emp.department.Name)</td>
+                    <td>@Html.DisplayFor(E => emp.Email)</td>
+                    <td>@emp.PhoneNumber</td>
+                    <td>@emp.HireData</td>
+                    <td>
+                        @if (emp.IsActive)
+                        {
+                            <i class="fa-solid fa-circle" style="color:green"></i>
+                        }
+                        else  {<i class="fa-solid fa-circle" style="color:red"></i>}
+                    </td>
+                    <partial name="_ButtomsPartialView" model="@emp.Id"/>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+	<div class="mt-5 alert alert-warning">
+        <h1>No Employee Found</h1>
+    </div>
+}
+
+@section TimeoutOfMessagesucess {
+    <script>
+        setTimeout(function () {
+            $('#alertContainer').fadeOut('fast');
+        }, 15000);
+    </script>
+}
